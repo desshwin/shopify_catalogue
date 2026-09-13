@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../data/models/product_model.dart';
 import '../../theme/app_theme.dart';
+import '../widgets/review_card_widget.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -168,8 +169,6 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            _buildHeader('Customer Reviews'),
-            const SizedBox(height: 14),
             product.reviews.isEmpty
                 ? const Text(
               'No reviews yet for this item.',
@@ -180,72 +179,7 @@ class ProductDetailScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: product.reviews.length,
               itemBuilder: (context, index) {
-                final review = product.reviews[index];
-                final initial = review.reviewerName.isNotEmpty
-                    ? review.reviewerName[0].toUpperCase()
-                    : 'A';
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppTheme.canvasSubdued.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.borderSubtle),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 14,
-                            backgroundColor: AppTheme.primaryIndigo.withOpacity(0.12),
-                            child: Text(
-                              initial,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.primaryIndigo,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              review.reviewerName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                color: AppTheme.textPrimary,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: List.generate(
-                              5,
-                                  (i) => Icon(
-                                i < review.rating
-                                    ? Icons.star_rounded
-                                    : Icons.star_border_rounded,
-                                size: 14,
-                                color: Colors.amber,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        review.comment,
-                        style: const TextStyle(
-                          color: AppTheme.textSecondary,
-                          fontSize: 12,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return ReviewCard(review: product.reviews[index]);
               },
             ),
             const SizedBox(height: 40),
